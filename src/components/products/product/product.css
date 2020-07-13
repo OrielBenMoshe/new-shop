@@ -1,0 +1,54 @@
+.Product {
+  position: relative;
+  border: rgb(25, 117, 160) solid 4px;
+  border-radius: 5px;
+  background-color: oldlace;
+  height: 220px;
+  width: 170px;
+  margin: 10px;
+  float: left;
+}
+
+img {
+  height: 100px;
+  object-fit: cover;
+
+  margin-top: 10px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+}
+
+.add_to_cart {
+  margin-top: 8px;
+}
+
+.pieces_count {
+  margin: 0 10px;
+}
+.increment {
+  border: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: lightblue;
+}
+.increment:hover {
+  background-color: rgb(160, 160, 160);
+}
+
+.decrement {
+  border: none;
+  height: 20px;
+  width: 20px;
+  border-radius: 100%;
+  background-color: lightblue;
+}
+.decrement:hover {
+  background-color: rgb(160, 160, 160);
+}
+
+* {
+  outline-style: none;
+}
