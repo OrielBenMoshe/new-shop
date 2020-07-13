@@ -8,19 +8,22 @@ class Product extends React.Component {
   };
 
   addToCart = () => {
-    console.log(this.state.count);
-
-    this.props.addToCart(this.state.count);
-    this.setState(({ quantity }) => ({
-      quantity: quantity - this.state.count,
-    }));
-    this.setState({ count: 0 });
+    if (this.state.quantity > 0) {
+      this.props.addToCart(this.state.count);
+      this.setState(({ quantity }) => ({
+        quantity: quantity - this.state.count,
+      }));
+      this.setState({ count: 0 });
+    }
   };
 
   incrementCount = () => {
+    console.log("count: " + this.state.count);
+    console.log("quantity: " + this.state.quantity);
     if (this.state.count < this.props.quantity)
       this.setState(({ count }) => ({ count: count + 1 }));
   };
+
   decrementCount = () => {
     if (this.state.count > 0)
       this.setState(({ count }) => ({ count: count - 1 }));
@@ -31,7 +34,13 @@ class Product extends React.Component {
         <b>{this.props.name}</b>
         <img src={this.props.image} alt="/images/noproduct.png" />
         <div className="quantity">quantity: {this.state.quantity}</div>
-        <div>
+        <div
+          style={
+            this.props.quantity
+              ? { visibility: "visible" }
+              : { visibility: "hidden" }
+          }
+        >
           <button className="decrement" onClick={this.decrementCount}>
             -
           </button>

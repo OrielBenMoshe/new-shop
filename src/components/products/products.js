@@ -8,8 +8,6 @@ class Products extends Component {
   state = { productsArray, count: 0 };
 
   addToCart = (pieces) => {
-    console.log(pieces);
-
     this.setState(({ count }) => ({ count: count + pieces }));
   };
 
