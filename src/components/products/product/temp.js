@@ -1,22 +1,33 @@
-class SimpleElement extends React.Component {
-  state = {
-    count: 5,
+import React, { Component } from "react";
+import "./products.css";
+import { productsArray } from "./mocks/products.mock";
+import Product from "./product/product";
+import Cart from "./cart/cart";
+
+class Products extends Component {
+  state = { productsArray, count: 0 };
+
+  addToCart = (pieces) => {
+    this.setState(({ count }) => ({ count: count + pieces }));
   };
-  resetCount = () => {
-    this.setState({ count: 0 });
-  };
-  incrementCount = () => {
-    this.setState(({ count }) => ({ count: count + 1 }));
-  };
+
   render() {
     return (
-      <div>
-        <div>Count: {this.state.count}</div>
-        <div>
-          <button onClick={this.incrementCount}>Increment Count</button>
-          <button onClick={this.resetCount}>Reset Count</button>
-        </div>
+      <div className="Products">
+        <div>Products</div>
+        <Cart count={this.state.count} />
+        {this.state.productsArray.map((product) => (
+          <Product
+            key={product.id}
+            name={product.name}
+            image={product.image}
+            quantity={product.quantity}
+            addToCart={this.addToCart}
+          />
+        ))}
       </div>
     );
   }
 }
+
+export default Products;

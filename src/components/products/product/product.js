@@ -1,60 +1,70 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import Button from "@material-ui/core/Button";
+
+import {
+  BrowserRouter as Router,
+  Route,
+  Link,
+  Switch,
+  useParams,
+} from "react-router-dom";
 import "./product.css";
 
-class Product extends React.Component {
-  state = {
-    count: 0,
-    quantity: this.props.quantity,
-  };
+// The Product Component.
+const Product = (props) => {
+  //Variables.
+  const [count, setCount] = useState(0);
+  const [quantity, setQuantity] = useState(props.quantity);
+  const [product, setProduct] = useState([]);
 
-  addToCart = () => {
-    if (this.state.quantity > 0) {
-      this.props.addToCart(this.state.count);
-      this.setState(({ quantity }) => ({
-        quantity: quantity - this.state.count,
-      }));
-      this.setState({ count: 0 });
+  // Add to cart function.
+  const addToCart = () => {
+    if (quantity > 0) {
+      props.addToCart(count, props.id);
+      setQuantity(quantity - count);
+      setCount(0);
     }
   };
-
-  incrementCount = () => {
-    console.log("count: " + this.state.count);
-    console.log("quantity: " + this.state.quantity);
-    if (this.state.count < this.props.quantity)
-      this.setState(({ count }) => ({ count: count + 1 }));
+  //Increment pieces function.
+  const incrementCount = () => {
+    if (count < quantity) setCount(count + 1);
+  };
+  //Decrement pieces function.
+  const decrementCount = () => {
+    if (count > 0) setCount(count - 1);
   };
 
-  decrementCount = () => {
-    if (this.state.count > 0)
-      this.setState(({ count }) => ({ count: count - 1 }));
-  };
-  render() {
-    return (
-      <div className="Product">
-        <b>{this.props.name}</b>
-        <img src={this.props.image} alt="/images/noproduct.png" />
-        <div className="quantity">quantity: {this.state.quantity}</div>
-        <div
-          style={
-            this.props.quantity
-              ? { visibility: "visible" }
-              : { visibility: "hidden" }
-          }
-        >
-          <button className="decrement" onClick={this.decrementCount}>
-            -
-          </button>
-          <span className="pieces_count">{this.state.count}</span>
-          <button className="increment" onClick={this.incrementCount}>
-            +
-          </button>
-        </div>
-        <button className="add_to_cart" onClick={this.addToCart}>
-          Add to cart
+  return (
+    <div className="Product">
+      <b>{props.title}</b>
+
+      {/* link for product page. */}
+      <Link to={"/product/" + props.id}>
+        <img src={props.image} alt="/images/noproduct.png" />
+      </Link>
+
+      <div className="quantity">quantity: {quantity}</div>
+      <div
+        style={quantity ? { visibility: "visible" } : { visibility: "hidden" }}
+      >
+        <button className="decrement" onClick={decrementCount}>
+          -
+        </button>
+        <span className="pieces_count">{count}</span>
+        <button className="increment" onClick={incrementCount}>
+          +
         </button>
       </div>
-    );
-  }
-}
+      <Button
+        className="add_to_cart"
+        onClick={addToCart}
+        variant="text"
+        color="primary"
+      >
+        Add to cart
+      </Button>
+    </div>
+  );
+};
 
 export default Product;

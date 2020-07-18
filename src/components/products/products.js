@@ -1,33 +1,43 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./products.css";
 import { productsArray } from "./mocks/products.mock";
 import Product from "./product/product";
-import Cart from "./cart/cart";
+import axios from "axios";
 
-class Products extends Component {
-  state = { productsArray, count: 0 };
+const Products = (props) => {
+  const [count, setCount] = useState(0);
+  const [products, setProducts] = useState([]);
 
-  addToCart = (pieces) => {
-    this.setState(({ count }) => ({ count: count + pieces }));
+  useEffect(() => {
+    axios.get("https://quilt-flax-chemistry.glitch.me/products").then((res) => {
+      setProducts(res.data);
+    });
+  }, []);
+
+  const addToCart = (count, id) => {
+    props.addToCart(count, id);
   };
 
-  render() {
-    return (
-      <div className="Products">
+  return (
+    <div className="Products">
+      <Link to="/">
         <div>Products</div>
-        <Cart count={this.state.count} />
-        {this.state.productsArray.map((product) => (
-          <Product
-            key={product.id}
-            name={product.name}
-            image={product.image}
-            quantity={product.quantity}
-            addToCart={this.addToCart}
-          />
-        ))}
-      </div>
-    );
-  }
-}
+      </Link>
+
+      {products.map((product) => (
+        <Product
+          key={product.id}
+          id={product.id}
+          title={product.title}
+          image={product.image}
+          quantity={product.quantity}
+          addToCart={addToCart}
+          // idResult={idResult}
+        />
+      ))}
+    </div>
+  );
+};
 
 export default Products;

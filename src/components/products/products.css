@@ -2,7 +2,9 @@
   position: relative;
   border: rgb(25, 117, 160) solid 2px;
   border-radius: 5px;
-  height: 590px;
-  width: 600px;
-  margin: auto;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  width: 595px;
+  height: 550px;
+  float: right;
 }
