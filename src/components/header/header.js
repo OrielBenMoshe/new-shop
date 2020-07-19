@@ -17,16 +17,20 @@ function Header(props) {
 
   return (
     <header className="Header">
-      <Slider
-        className="slider"
-        // marks={marks}
-        max={props.max}
-        min={props.min}
-        included="false"
-        range
-        onChange={range}
-        // defaultValue={[0, 500]}
-      />
+      {props.min && props.max && (
+        <Slider
+          className="slider"
+          // marks={marks}
+          defaultValue={[props.min, props.max]}
+          max={props.max}
+          min={props.min}
+          included="false"
+          range
+          onChange={range}
+          tooltipVisible
+          // defaultValue={[0, 500]}
+        />
+      )}
     </header>
   );
 }

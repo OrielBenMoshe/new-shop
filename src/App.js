@@ -24,7 +24,7 @@ function App() {
     setProductsCount(productsCount + pieces);
     setProductId(id);
     axios
-      .get("https://quilt-flax-chemistry.glitch.me/products/" + id)
+      .get("https://handsomely-maze-stoat.glitch.me/products/" + id)
       .then((res) => {
         setProductToCart(res.data);
       });

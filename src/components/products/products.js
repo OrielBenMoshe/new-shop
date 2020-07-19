@@ -14,15 +14,17 @@ const Products = (props) => {
   useEffect(() => {
     let min;
     let max;
-    axios.get("https://quilt-flax-chemistry.glitch.me/products").then((res) => {
-      setProducts(res.data);
-      res.data.forEach((product) => {
-        if (min > product.price || !min) min = product.price;
+    axios
+      .get("https://handsomely-maze-stoat.glitch.me/products")
+      .then((res) => {
+        setProducts(res.data);
+        res.data.forEach((product) => {
+          if (min > product.price || !min) min = product.price;
 
-        if (max < product.price || !max) max = product.price;
+          if (max < product.price || !max) max = product.price;
+        });
+        props.minMax(min, max);
       });
-      props.minMax(min, max);
-    });
   }, []);
 
   const addToCart = (count, id) => {
