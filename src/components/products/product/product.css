@@ -1,9 +1,9 @@
 .Product {
   position: relative;
   border: rgb(25, 117, 160) solid 4px;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: oldlace;
-  height: 220px;
+  height: 250px;
   width: 170px;
   margin: 10px;
   float: left;
@@ -19,9 +19,13 @@ img {
   margin-right: auto;
   width: 60%;
 }
+.price {
+  font-weight: 600;
+  font-size: 16px;
+}
 
 .add_to_cart {
-  margin-top: 8px;
+  margin-top: 12px;
 }
 
 .pieces_count {

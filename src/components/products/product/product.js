@@ -43,6 +43,7 @@ const Product = (props) => {
         <img src={props.image} alt="/images/noproduct.png" />
       </Link>
 
+      <div className="price">price: {props.price}</div>
       <div className="quantity">quantity: {quantity}</div>
       <div
         style={quantity ? { visibility: "visible" } : { visibility: "hidden" }}

@@ -1,7 +1,10 @@
 .cart {
-  border: 5px solid rgb(223, 223, 104);
-  width: 250px;
-  margin-left: 10px;
+  border: 0px solid rgb(223, 223, 104);
+  background-color: rgb(223, 223, 104);
+  border-radius: 10px;
+  width: 330px;
+  height: 550px;
+  margin-left: 6px;
   margin-bottom: 10px;
   padding: 3px 0;
   float: left;

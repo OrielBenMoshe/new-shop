@@ -20,9 +20,8 @@ function ProductPage() {
         setProductPage(res.data);
       });
   }, []);
-  useEffect(() => {
-    console.log(productPage);
-  }, [productPage]);
+  // useEffect(() => {
+  // }, [productPage]);
 
   return (
     <div className="productPage">

@@ -19,18 +19,24 @@ const Products = (props) => {
     props.addToCart(count, id);
   };
 
+  const filteredProducts = (products) => {
+    return products.filter(
+      (product) =>
+        product.price >= props.range[0] && product.price <= props.range[1]
+    );
+  };
+
   return (
     <div className="Products">
-      <Link to="/">
-        <div>Products</div>
-      </Link>
+      <div className="title">Products</div>
 
-      {products.map((product) => (
+      {filteredProducts(products).map((product) => (
         <Product
           key={product.id}
           id={product.id}
           title={product.title}
           image={product.image}
+          price={product.price}
           quantity={product.quantity}
           addToCart={addToCart}
           // idResult={idResult}

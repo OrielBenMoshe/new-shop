@@ -12,44 +12,47 @@ import "./App.css";
 import Header from "./components/header/header";
 import Cart from "./components/cart/cart";
 import Products from "./components/products/products";
-import ProductPage from "./components/products/product/product_page/product_page";
+import ProductPage from "./pages/product_page/product_page";
 
 function App() {
   const [products, setProducts] = useState([]);
-  const [productId, setProductId] = useState("");
-  const [ProductToCart, setProductToCart] = useState();
+  const [productId, setProductId] = useState(0);
+  const [ProductToCart, setProductToCart] = useState({});
   const [productsCount, setProductsCount] = useState(0);
-
+  const [rangeValue, setRangeValue] = useState([0, 100]);
   const addToCart = (pieces, id) => {
     setProductsCount(productsCount + pieces);
     setProductId(id);
-    setProductToCart(products.find(() => products.id === productId));
-    console.log(ProductToCart);
+    axios
+      .get("https://quilt-flax-chemistry.glitch.me/products/" + id)
+      .then((res) => {
+        setProductToCart(res.data);
+      });
+
+    // setProductToCart(products.find(() => products.id === productId));
   };
 
-  useEffect(() => {
-    axios.get("https://quilt-flax-chemistry.glitch.me/products").then((res) => {
-      setProducts(res.data);
-    });
-  }, []);
-
+  // useEffect(() => {
+  //   console.log(ProductToCart);
+  // }, [ProductToCart]);
+  const range = (value) => {
+    setRangeValue(value);
+  };
   return (
     <div className="App">
-      <Header />
-      <Cart count={productsCount} newProduct={ProductToCart} />
+      <Header range={range} />
       <Router>
+        <Cart
+          count={productsCount}
+          newProduct={ProductToCart ? ProductToCart : ""}
+        />
+
         <Switch>
           <Route exact path="/">
-            <Products addToCart={addToCart} />
+            <Products addToCart={addToCart} range={rangeValue} />
           </Route>
           <Route path="/Product/:idParam">
-            <ProductPage
-            // id={product.id}
-            // title={product.title}
-            // image={product.image}
-            // quantity={product.quantity}
-            // description={product.description}
-            />
+            <ProductPage />
           </Route>
         </Switch>
       </Router>
