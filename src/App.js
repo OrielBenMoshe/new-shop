@@ -38,9 +38,16 @@ function App() {
   const range = (value) => {
     setRangeValue(value);
   };
+  const [max, setMax] = useState();
+  const [min, setMin] = useState();
+
+  const minMax = (min, max) => {
+    setMin(min);
+    setMax(max);
+  };
   return (
     <div className="App">
-      <Header range={range} />
+      <Header range={range} min={min} max={max} />
       <Router>
         <Cart
           count={productsCount}
@@ -49,7 +56,11 @@ function App() {
 
         <Switch>
           <Route exact path="/">
-            <Products addToCart={addToCart} range={rangeValue} />
+            <Products
+              addToCart={addToCart}
+              range={rangeValue}
+              minMax={minMax}
+            />
           </Route>
           <Route path="/Product/:idParam">
             <ProductPage />

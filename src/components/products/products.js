@@ -8,10 +8,20 @@ import axios from "axios";
 const Products = (props) => {
   const [count, setCount] = useState(0);
   const [products, setProducts] = useState([]);
+  const [max, setMax] = useState();
+  const [min, setMin] = useState();
 
   useEffect(() => {
+    let min;
+    let max;
     axios.get("https://quilt-flax-chemistry.glitch.me/products").then((res) => {
       setProducts(res.data);
+      res.data.forEach((product) => {
+        if (min > product.price || !min) min = product.price;
+
+        if (max < product.price || !max) max = product.price;
+      });
+      props.minMax(min, max);
     });
   }, []);
 
@@ -39,7 +49,6 @@ const Products = (props) => {
           price={product.price}
           quantity={product.quantity}
           addToCart={addToCart}
-          // idResult={idResult}
         />
       ))}
     </div>
