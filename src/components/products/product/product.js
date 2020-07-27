@@ -19,10 +19,17 @@ const Product = (props) => {
 
   // Add to cart function.
   const addToCart = () => {
-    if (quantity > 0) {
-      props.addToCart(count, props.id);
+    if (quantity > 0 && count > 0) {
       setQuantity(quantity - count);
       setCount(0);
+      let productToCart = {
+        id: props.id,
+        title: props.title,
+        image: props.image,
+        price: props.price * count,
+        quantity: count,
+      };
+      props.addToCart(productToCart);
     }
   };
   //Increment pieces function.

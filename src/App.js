@@ -15,26 +15,41 @@ import Products from "./components/products/products";
 import ProductPage from "./pages/product_page/product_page";
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [productId, setProductId] = useState(0);
-  const [ProductToCart, setProductToCart] = useState({});
-  const [productsCount, setProductsCount] = useState(0);
+  const [productsInCart, setProductsInCart] = useState([]);
   const [rangeValue, setRangeValue] = useState([0, 100]);
-  const addToCart = (pieces, id) => {
-    setProductsCount(productsCount + pieces);
-    setProductId(id);
-    axios
-      .get("https://handsomely-maze-stoat.glitch.me/products/" + id)
-      .then((res) => {
-        setProductToCart(res.data);
-      });
+  const [totalPrice, setTotalPrice] = useState(0);
+  const [numOfItems, setNumOfItems] = useState(0);
 
-    // setProductToCart(products.find(() => products.id === productId));
+  const addToCart = (productToCart) => {
+    // Find the index of product that already exist in the cart.
+    const findifProductExistInCart = (product) => {
+      return product.id === productToCart.id;
+    };
+    let productIndex = productsInCart.findIndex(findifProductExistInCart);
+    // Add to Cart product according to the situation, whether it exists or not.
+    if (productIndex < 0)
+      setProductsInCart((productsInCart) => [...productsInCart, productToCart]);
+    else {
+      let newProductsInCart = productsInCart.map((product) => {
+        if (product.id === productToCart.id) {
+          product.quantity += productToCart.quantity;
+          product.price += productToCart.price;
+        }
+        return product;
+      });
+      setProductsInCart(newProductsInCart);
+    }
+    setTotalPrice((totalPrice) => totalPrice + productToCart.price);
+    setNumOfItems((numOfItems) => numOfItems + productToCart.quantity);
   };
 
-  // useEffect(() => {
-  //   console.log(ProductToCart);
-  // }, [ProductToCart]);
+  // Reduce from the cart the removed product and change accordingly the total price and the num of items.
+  const reducedCart = (reducedCartArray, reducedQuantity, reducedPrice) => {
+    setProductsInCart(reducedCartArray);
+    setTotalPrice((totalPrice) => totalPrice - reducedPrice);
+    setNumOfItems((numOfItems) => numOfItems - reducedQuantity);
+  };
+
   const range = (value) => {
     setRangeValue(value);
   };
@@ -45,13 +60,16 @@ function App() {
     setMin(min);
     setMax(max);
   };
+
   return (
     <div className="App">
       <Header range={range} min={min} max={max} />
       <Router>
         <Cart
-          count={productsCount}
-          newProduct={ProductToCart ? ProductToCart : ""}
+          productsInCart={productsInCart}
+          totalPrice={totalPrice}
+          numOfItems={numOfItems}
+          reducedCart={reducedCart}
         />
 
         <Switch>

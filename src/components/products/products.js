@@ -27,8 +27,8 @@ const Products = (props) => {
       });
   }, []);
 
-  const addToCart = (count, id) => {
-    props.addToCart(count, id);
+  const addToCart = (productToCart) => {
+    props.addToCart(productToCart);
   };
 
   const filteredProducts = (products) => {
