@@ -1,24 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
-import {
-  BrowserRouter as Router,
-  Route,
-  Link,
-  Switch,
-  useParams,
-} from "react-router-dom";
-
 import "./App.css";
+
+//Components import/
 import Header from "./components/header/header";
 import Cart from "./components/cart/cart";
 import Products from "./components/products/products";
 import ProductPage from "./pages/product_page/product_page";
+import SearchProduct from "./components/searchProduct/SearchProduct";
+import ModalAddProduct from "./components/addProduct/ModalAddProduct";
 
 function App() {
   const [productsInCart, setProductsInCart] = useState([]);
   const [rangeValue, setRangeValue] = useState([0, 100]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [numOfItems, setNumOfItems] = useState(0);
+  // const [updatedInventory, setUpdatedInventory] = useState([]);
 
   const addToCart = (productToCart) => {
     // Find the index of product that already exist in the cart.
@@ -60,31 +58,48 @@ function App() {
     setMin(min);
     setMax(max);
   };
+  //Adding the news pruducts to product inventory.
+  const addingProducts = (productAdded) => {
+    console.log(productAdded);
+    productAdded.length > 0 &&
+      axios.post("http://127.0.0.1:5050/products", productAdded);
+  };
 
+  // const productInventory = (currentInventory) => {
+  //   newProducts.length > 0 &&
+  //     setUpdatedInventory([...currentInventory, ...newProducts]);
+  // };
   return (
     <div className="App">
       <Header range={range} min={min} max={max} />
-      <Router>
+      <div className="managementButtons">
+        <SearchProduct />
+        <ModalAddProduct addingProducts={addingProducts} />
+      </div>
+
+      <div>
         <Cart
           productsInCart={productsInCart}
           totalPrice={totalPrice}
           numOfItems={numOfItems}
           reducedCart={reducedCart}
         />
-
-        <Switch>
-          <Route exact path="/">
-            <Products
-              addToCart={addToCart}
-              range={rangeValue}
-              minMax={minMax}
-            />
-          </Route>
-          <Route path="/Product/:idParam">
-            <ProductPage />
-          </Route>
-        </Switch>
-      </Router>
+        <Router>
+          <Switch>
+            <Route exact path="/">
+              <Products
+                addToCart={addToCart}
+                range={rangeValue}
+                minMax={minMax}
+                // productInventory={productInventory}
+              />
+            </Route>
+            <Route path="/Product/:idParam">
+              <ProductPage />
+            </Route>
+          </Switch>
+        </Router>
+      </div>
     </div>
   );
 }
