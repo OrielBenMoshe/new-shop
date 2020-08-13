@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
@@ -58,6 +58,8 @@ function App() {
     setMin(min);
     setMax(max);
   };
+  const fileInput = useRef();
+
   //Adding the news pruducts to product inventory.
   const addingProducts = (productAdded) => {
     console.log(productAdded);
