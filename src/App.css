@@ -1,28 +1,13 @@
 .App {
-  text-align: center;
-  border: #282c34 solid 5px;
-  border-radius: 10px;
-  background-color: #282c34;
-  height: 760px;
-  width: 1000px;
-  margin: auto;
-  margin-top: 20px;
-  display: inline-block;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  /* text-align: center; */
+  background-color: #f7e8b9;
+  height: 100vh;
+  width: 100%;
+  padding: 10px;
 }
 
 .managementButtons {
-  display: inline-block;
+  /* display: inline-block; */
   margin: 15px;
   width: 400px;
   margin-inline-end: 5px;

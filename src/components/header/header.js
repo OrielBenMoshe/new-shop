@@ -1,38 +1,28 @@
 import React, { useState, useEffect } from "react";
 import "./header.css";
-import { Slider, Button } from "antd";
+import { Button } from "antd";
+import { Link, useLocation } from "react-router-dom";
 
 function Header(props) {
-  const marks = {
-    // 0: props.min,
-    // 100: props.max,
-  };
-  const [products, setProducts] = useState([]);
+  let location = useLocation();
 
-  const range = (value) => {
-    props.range(value);
-  };
+  const [adminOrClient, setAdminOrClient] = useState();
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const toggle = location.pathname === "/" ? "/admin" : "/";
+
+    setAdminOrClient(toggle);
+  }, [location]);
 
   return (
     <header className="Header">
-      {props.min && props.max && (
-        <Slider
-          className="slider"
-          // marks={marks}
-          defaultValue={[props.min, props.max]}
-          max={props.max}
-          min={props.min}
-          included="false"
-          range
-          onChange={range}
-          tooltipVisible
-          // defaultValue={[0, 500]}
-        />
-      )}
+      <h1>ONLINE REACT STORE</h1>
+      <Link to={adminOrClient}>
+        <Button className="adminOrClientButton">
+          {adminOrClient === "/admin" ? "Admin" : "Client"}
+        </Button>
+      </Link>
     </header>
   );
 }
-
 export default Header;

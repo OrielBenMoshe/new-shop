@@ -1,8 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./ModalAddProduct";
 import { Modal, Button } from "antd";
 import Add_products_table from "../../pages/add_products_table/Add_products_table";
-import { OmitProps } from "antd/lib/transfer/ListBody";
 import axios from "axios";
 
 const ModalAddProduct = (props) => {
@@ -10,7 +9,8 @@ const ModalAddProduct = (props) => {
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [clear, setClear] = useState(false);
-  const [productAdded, setProductAdded] = useState([]);
+  const [productsAdded, setProductsAdded] = useState([]);
+  const [imagesAdded, setImagesAdded] = useState([]);
 
   // const [newProducts, setNewProducts] = useState([]);
 
@@ -19,11 +19,25 @@ const ModalAddProduct = (props) => {
     setClear(false);
   };
 
+  //Sending the news products.
   const handleOk = () => {
     // setModalText("The modal will be closed after two seconds");
     setConfirmLoading(true);
-    props.addingProducts(productAdded);
-    setProductAdded([]);
+
+    //Upload images  new products to the server
+    imagesAdded.map((image) => {
+      axios.post("http://localhost:7000/uploadImages", image, {
+        params: { filename: image.name },
+        onUploadProgress: function (progressEvent) {
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total
+          );
+        },
+      });
+    });
+
+    props.addingProducts(productsAdded);
+    setProductsAdded([]);
 
     setTimeout(() => {
       setVisible(false);
@@ -36,11 +50,24 @@ const ModalAddProduct = (props) => {
     console.log("Clicked cancel button");
     setVisible(false);
     setClear(true);
-    setProductAdded([]);
+    setProductsAdded([]);
   };
 
   const addingProducts = (newData) => {
-    setProductAdded(newData);
+    if (imagesAdded.length > 0 && newData.length > 0) {
+      console.log("imagesAdded", imagesAdded);
+      for (let i = 0; i < newData.length; i++) {
+        newData[i].image = imagesAdded[i]
+          ? imagesAdded[i].name
+          : "noproduct.png";
+      }
+      console.log(newData);
+      setProductsAdded(newData);
+    }
+  };
+
+  const imagesToUpload = (imagesArr) => {
+    setImagesAdded(imagesArr);
   };
 
   // const { visible, confirmLoading, ModalText } = this.state;
@@ -60,7 +87,11 @@ const ModalAddProduct = (props) => {
         width="80%"
         addingProducts={addingProducts}
       >
-        <Add_products_table addingProducts={addingProducts} clear={clear} />
+        <Add_products_table
+          imagesToUpload={imagesToUpload}
+          addingProducts={addingProducts}
+          clear={clear}
+        />
       </Modal>
     </>
   );

@@ -1,17 +1,15 @@
 @import "~antd/dist/antd.css";
 
 .Header {
-  border: tomato solid 5px;
-  border-radius: 10px;
   background-color: tomato;
-  height: 50px;
-  margin: 5px 5px 15px 5px;
+  height: 170px;
+  /* margin: 0px 0px 15px 0px; */
   font-weight: bold;
   font-family: Alef;
+  flex-wrap: wrap;
+  padding: 10px;
 }
 
-.slider {
-  width: 400px;
-  margin: auto;
-  margin-top: 10px;
+.adminOrClientButton {
+  float: right;
 }

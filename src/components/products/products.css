@@ -1,18 +1,38 @@
 .Products {
   font-family: Alef;
-  position: relative;
-  border: rgb(25, 117, 160) solid 2px;
-  background-color: rgb(25, 117, 160);
+  /* position: relative; */
+  /* border: rgb(25, 117, 160) solid 2px;
+  background-color: rgb(25, 117, 160); */
   border-radius: 10px;
   margin-right: 6px;
   margin-bottom: 10px;
-  width: 574px;
-  height: 602px;
-  float: right;
+  /* width: 65%; */
+  height: auto;
+
+  /* float: right; */
 }
 
 .title {
+  padding-left: 10px;
+
   font-family: Alef;
-  font-weight: bold;
-  color: white;
+  color: rgb(0, 0, 0);
+  font-size: 25px;
+}
+
+h1 {
+  padding-top: 20px;
+  font-size: xx-large;
+  text-align: center;
+  width: max-content;
+}
+
+.slider {
+  width: 400px;
+  /* margin: auto; */
+  margin-top: 10px;
+}
+
+.ant-tooltip {
+  z-index: 1000;
 }

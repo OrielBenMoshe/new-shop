@@ -1,12 +1,16 @@
 .Product {
   position: relative;
-  border: rgb(25, 117, 160) solid 4px;
-  border-radius: 10px;
+  border: rgb(154, 208, 233) solid 1px;
+
+  border-radius: 2px;
   background-color: oldlace;
-  height: 250px;
+  height: 280px;
   width: 170px;
   margin: 10px;
+  margin-inline-end: 1px;
   float: left;
+  text-align: center;
+  padding: 10px;
 }
 
 img {
@@ -22,6 +26,10 @@ img {
 .price {
   font-weight: 600;
   font-size: 16px;
+}
+
+.quantity {
+  margin-bottom: 5px;
 }
 
 .add_to_cart {

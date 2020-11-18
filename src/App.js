@@ -1,22 +1,29 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import axios from "axios";
 import "./App.css";
+import { ProductsProvider } from "./ProductsContext";
+import { Row, Col } from "antd";
 
 //Components import/
 import Header from "./components/header/header";
 import Cart from "./components/cart/cart";
 import Products from "./components/products/products";
 import ProductPage from "./pages/product_page/product_page";
-import SearchProduct from "./components/searchProduct/SearchProduct";
+import EditableProductsTable from "./components/adminPage/EditableProductsTable";
+
 import ModalAddProduct from "./components/addProduct/ModalAddProduct";
 
 function App() {
   const [productsInCart, setProductsInCart] = useState([]);
-  const [rangeValue, setRangeValue] = useState([0, 100]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [numOfItems, setNumOfItems] = useState(0);
-  // const [updatedInventory, setUpdatedInventory] = useState([]);
+
+  const [products, setProducts] = useState([]);
+  const providerOptions = {
+    data: products,
+    changeProducts: (value) => setProducts(value),
+  };
 
   const addToCart = (productToCart) => {
     // Find the index of product that already exist in the cart.
@@ -48,60 +55,85 @@ function App() {
     setNumOfItems((numOfItems) => numOfItems - reducedQuantity);
   };
 
-  const range = (value) => {
-    setRangeValue(value);
-  };
-  const [max, setMax] = useState();
-  const [min, setMin] = useState();
-
-  const minMax = (min, max) => {
-    setMin(min);
-    setMax(max);
-  };
-  const fileInput = useRef();
-
   //Adding the news pruducts to product inventory.
-  const addingProducts = (productAdded) => {
-    console.log(productAdded);
-    productAdded.length > 0 &&
-      axios.post("http://127.0.0.1:5050/products", productAdded);
+  const addingProducts = async (productsAdded) => {
+    console.log("productsAdded", productsAdded);
+    productsAdded.length > 0 &&
+      (await axios.post("http://127.0.0.1:7000/products", productsAdded));
   };
 
-  // const productInventory = (currentInventory) => {
-  //   newProducts.length > 0 &&
-  //     setUpdatedInventory([...currentInventory, ...newProducts]);
-  // };
+  const postData = async () => {
+    await axios.post("http://127.0.0.1:7000/products", products);
+  };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await axios.get("http://127.0.0.1:7000/products");
+      setProducts(res.data);
+    };
+    getData();
+  }, []);
+
   return (
     <div className="App">
-      <Header range={range} min={min} max={max} />
-      <div className="managementButtons">
-        <SearchProduct />
-        <ModalAddProduct addingProducts={addingProducts} />
-      </div>
+      <Router>
+        <Row>
+          <Col span={24}>
+            <Header />
+          </Col>
+        </Row>
 
-      <div>
-        <Cart
-          productsInCart={productsInCart}
-          totalPrice={totalPrice}
-          numOfItems={numOfItems}
-          reducedCart={reducedCart}
-        />
-        <Router>
-          <Switch>
-            <Route exact path="/">
-              <Products
-                addToCart={addToCart}
-                range={rangeValue}
-                minMax={minMax}
-                // productInventory={productInventory}
-              />
+        <ProductsProvider value={providerOptions}>
+          <Row>
+            <Switch>
+              <Route exact path="/">
+                <Col span={18}>
+                  <Products
+                    addToCart={addToCart}
+                    path="/"
+                    // productInventory={productInventory}
+                  />
+                </Col>
+                <Col span={6}>
+                  <Cart
+                    productsInCart={productsInCart}
+                    totalPrice={totalPrice}
+                    numOfItems={numOfItems}
+                    reducedCart={reducedCart}
+                  />
+                </Col>
+              </Route>
+
+              <Route path="/Product/:idParam">
+                <Col span={18}>
+                  <ProductPage />
+                </Col>
+                <Col span={6}>
+                  <Cart
+                    productsInCart={productsInCart}
+                    totalPrice={totalPrice}
+                    numOfItems={numOfItems}
+                    reducedCart={reducedCart}
+                  />
+                </Col>
+              </Route>
+            </Switch>
+
+            <Route path="/admin">
+              <Col span={24}>
+                <EditableProductsTable postData={postData} />
+              </Col>
+              {/* <Col span={18}>
+              <Products addToCart={addToCart} path="/admin" />
+            </Col>
+
+            <Col span={6}>
+              <ModalAddProduct addingProducts={addingProducts} />
+            </Col> */}
             </Route>
-            <Route path="/Product/:idParam">
-              <ProductPage />
-            </Route>
-          </Switch>
-        </Router>
-      </div>
+          </Row>
+        </ProductsProvider>
+      </Router>
     </div>
   );
 }

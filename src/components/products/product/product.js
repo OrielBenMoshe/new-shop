@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import Button from "@material-ui/core/Button";
-
 import {
   BrowserRouter as Router,
   Route,
@@ -23,7 +22,7 @@ const Product = (props) => {
       setQuantity(quantity - count);
       setCount(0);
       let productToCart = {
-        id: props.id,
+        key: props.productKey,
         title: props.title,
         image: props.image,
         price: props.price * count,
@@ -32,6 +31,11 @@ const Product = (props) => {
       props.addToCart(productToCart);
     }
   };
+  //Delete a product.
+  const deleteProduct = () => {
+    props.delete(props.productKey);
+  };
+
   //Increment pieces function.
   const incrementCount = () => {
     if (count < quantity) setCount(count + 1);
@@ -46,7 +50,7 @@ const Product = (props) => {
       <b>{props.title}</b>
 
       {/* link for product page. */}
-      <Link to={"/product/" + props.id}>
+      <Link to={"/product/" + props.productKey}>
         <img src={props.image} alt="/images/noproduct.png" />
       </Link>
 
@@ -63,14 +67,26 @@ const Product = (props) => {
           +
         </button>
       </div>
-      <Button
-        className="add_to_cart"
-        onClick={addToCart}
-        variant="text"
-        color="primary"
-      >
-        Add to cart
-      </Button>
+
+      {props.isAdmin ? (
+        <Button
+          className="delete_product"
+          onClick={deleteProduct}
+          variant="text"
+          color="secondary"
+        >
+          Delete product
+        </Button>
+      ) : (
+        <Button
+          className="add_to_cart"
+          onClick={addToCart}
+          variant="text"
+          color="primary"
+        >
+          Add to cart
+        </Button>
+      )}
     </div>
   );
 };

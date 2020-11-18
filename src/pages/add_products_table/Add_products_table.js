@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect, useRef } from "react";
 import { Table, Input, Button, Popconfirm, Form } from "antd";
 import "./Add_products_table";
 import UploadImage from "./../../components/UploadImage/UploadImage";
+import axios from "axios";
 
 const EditableContext = React.createContext();
 
@@ -27,6 +28,7 @@ const EditableCell = ({
 }) => {
   const [editing, setEditing] = useState(false);
   const inputRef = useRef();
+
   const form = useContext(EditableContext);
 
   useEffect(() => {
@@ -123,7 +125,7 @@ const Add_products_table = (props) => {
         dataSource.length >= 1 ? (
           <Popconfirm
             title="Sure to delete?"
-            onConfirm={() => handleDelete(record.id)}
+            onConfirm={() => handleDelete(record.key)}
           >
             <a>Delete</a>
           </Popconfirm>
@@ -160,30 +162,61 @@ const Add_products_table = (props) => {
   }, [props.clear]);
 
   //Delet a product.
-  const handleDelete = (id) => {
-    setDataSource((dataSource) => dataSource.filter((item) => item.id !== id));
-  };
-
-  //Add product.
-  const handleAdd = () => {
-    const newData = {
-      id: count,
-      title: `Add name`,
-      image: <UploadImage />,
-      price: `Add price`,
-      quantity: `Add quantity`,
-    };
-    setDataSource((dataSource) => [...dataSource, newData]);
-    setCount((count) => count + 1);
+  const handleDelete = (key) => {
+    setDataSource((dataSource) =>
+      dataSource.filter((item) => item.key !== key)
+    );
   };
 
   const handleSave = (row) => {
     const newData = [...dataSource];
-    const index = newData.findIndex((item) => row.id === item.id);
+    const index = newData.findIndex((item) => row.key === item.key);
     const item = newData[index];
     newData.splice(index, 1, { ...item, ...row });
     setDataSource(newData);
     props.addingProducts(dataSource);
+  };
+
+  const imageInput = useRef();
+  let [imagesArr, setImageArr] = useState([]);
+
+  const imageToArr = () => {
+    const uploadImage = imageInput.current;
+
+    setImageArr((imagesArr) => [...imagesArr, uploadImage.files[0]]);
+    props.imagesToUpload(imagesArr);
+  };
+
+  // console.log("uploadImage: ", uploadImage);
+  // axios.get("http://localhost:7000/uploadImages", uploadImage.files[0], {
+  //   params: { filename: newData.title + ".png" },
+  //   onUploadProgress: function (progressEvent) {
+  //     const percentCompleted = Math.round(
+  //       (progressEvent.loaded * 100) / progressEvent.total
+  //     );
+  //   },
+  // });
+  // const fixedData = newData;
+  // fixedData.image = `/images/${fixedData.title}.png`;
+
+  //Add product.
+  const addProduct = () => {
+    // if (
+    //   dataSource[dataSource.length - 1].title !== `Add name` &&
+    //   dataSource[dataSource.length - 1].price !== `Add price` &&
+    //   [dataSource.length - 1].quantity !== `Add quantity`
+    // ) {
+    const newData = {
+      key: count,
+      title: `Add name`,
+      image: <input type="file" ref={imageInput} onInput={imageToArr} />,
+      price: `Add price`,
+      quantity: `Add quantity`,
+    };
+
+    setDataSource((dataSource) => [...dataSource, newData]);
+    setCount((count) => count + 1);
+    // }
   };
 
   // const [ dataSource, setDataSource ] = useState();
@@ -191,7 +224,7 @@ const Add_products_table = (props) => {
   return (
     <div>
       <Button
-        onClick={handleAdd}
+        onClick={addProduct}
         type="primary"
         style={{
           marginBottom: 16,
